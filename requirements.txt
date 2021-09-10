@@ -1,0 +1,4 @@
+pkg-resources==0.0.0
+PyGLM==2.4.0
+PyOpenGL==3.1.5
+PyOpenGL-accelerate==3.1.5
