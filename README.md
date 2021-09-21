@@ -12,7 +12,7 @@ pip3 install -r requirements.txt
 python3 main.py
 ```
 
-Use `w`, `s`, `a`, `d` para mover-se 
+Use `w`, `s`, `a`, `d` para mover-se<br/>
 `p` para abrir/fechar a porta
 
 ## Requisitos
@@ -31,7 +31,7 @@ Use `w`, `s`, `a`, `d` para mover-se
 https://youtu.be/pVprG3pbPb4
 
 ## Referências
-https://opengameart.org/content/kitchen-texture-pack
-https://learnopengl.com/
-https://wiki.python.org/moin/PyOpenGL
+https://opengameart.org/content/kitchen-texture-pack<br/>
+https://learnopengl.com/<br/>
+https://wiki.python.org/moin/PyOpenGL<br/>
 https://www.glprogramming.com/red/chapter05.html
