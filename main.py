@@ -108,6 +108,20 @@ def draw_chair():
 def draw_fridge():
   create_block(25, 0, -26.5, 5, 8.5, 2, frontTexture=textures['fridge'], restTexture=textures['fridge2'])
 
+def draw_stove():
+  create_block(3, 0, -25, 4, 4, 4, frontTexture=textures['stove'], restTexture=textures['fridge2'])
+
+def draw_teapot():
+  glEnable(GL_TEXTURE_2D)
+  glBindTexture(GL_TEXTURE_2D, textures['metal'])
+
+  glPushMatrix()
+  glTranslatef(16.75, 4.2, -14.75)
+  glutSolidTeapot(1)
+  glPopMatrix()
+
+  glDisable(GL_TEXTURE_2D)
+
 def draw_cabinet():
   create_block(10, 3, -27, 7, 0.5, 3, restTexture=textures['marble'])
   create_block(10.5, 0, -27.5, 6, 3, 2.5, restTexture=textures['wood'])
@@ -144,15 +158,17 @@ def showScreen():
 
   cam.update()
   
-  glLightfv(GL_LIGHT0, GL_POSITION, [17, 4, -14, 1])
-  glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, [0, 1, 0])
-  glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 90)
+  #glLightfv(GL_LIGHT0, GL_POSITION, [17, 4, -14, 1])
+  #glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, [0, 1, 0])
+  #glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 90)
 
   draw_room()
   draw_table()
   draw_chair()
   draw_picture()
   draw_fridge()
+  draw_stove()
+  draw_teapot()
   draw_cabinet()
   draw_fan()
 
@@ -176,6 +192,7 @@ textures['metal'] = load_texture('textures/metal.jpg')
 textures['marble'] = load_texture('textures/marble.jpg')
 textures['fridge'] = load_texture('textures/fridge.png')
 textures['fridge2'] = load_texture('textures/fridge2.png')
+textures['stove'] = load_texture('textures/stove.png')
 
 glutDisplayFunc(showScreen)
 glutIdleFunc(showScreen)
@@ -186,12 +203,12 @@ glMatrixMode(GL_MODELVIEW)
 glLoadIdentity()
 
 glEnable(GL_DEPTH_TEST)
-glEnable(GL_LIGHTING)
-glEnable(GL_LIGHT0)
-glLightfv(GL_LIGHT0, GL_DIFFUSE, [1, 1, 1, 1])
-glLightfv(GL_LIGHT0, GL_SPECULAR, [1, 1, 1, 1])
-glEnable(GL_COLOR_MATERIAL)
-glLightModelfv(GL_LIGHT_MODEL_AMBIENT, [0.5, 0.5, 0.5, 1])
+#glEnable(GL_LIGHTING)
+#glEnable(GL_LIGHT0)
+#glLightfv(GL_LIGHT0, GL_DIFFUSE, [1, 1, 1, 1])
+#glLightfv(GL_LIGHT0, GL_SPECULAR, [1, 1, 1, 1])
+#glEnable(GL_COLOR_MATERIAL)
+#glLightModelfv(GL_LIGHT_MODEL_AMBIENT, [0.7, 0.7, 0.7, 1])
 
 cam.init()
 
