@@ -4,6 +4,7 @@ from OpenGL.GLU import *
 import glm
 from utils.camera import Camera
 from utils.texture_loader import load_texture
+from utils.block_creator import create_block
 
 textures = {}
 
@@ -18,118 +19,6 @@ t = 0
 doorOpen = False
 
 cam = Camera(WIDTH, HEIGHT)
-
-def create_block(x, y, z, width, height, depth, **kwargs):
-  side = { 'leftTexture', 'rightTexture', 'frontTexture', 'backTexture', 'topTexture',
-           'bottomTexture', 'restTexture' }
-
-  if 'restTexture' in kwargs:
-    rest = set(side) - set(kwargs)
-    for each in rest:
-      kwargs[each] = kwargs['restTexture']
-
-  glEnable(GL_TEXTURE_2D)
-  glBindTexture(GL_TEXTURE_2D, textures[kwargs['frontTexture']])
-
-  glBegin(GL_QUADS)
-  glNormal3f(0, 0, 1)
-  glTexCoord2f(0.0, 0.0)
-  glVertex3f(x, y, z)
-  glTexCoord2f(1.0, 0.0)
-  glVertex3f(x+width, y, z)
-  glTexCoord2f(1.0, 1.0)
-  glVertex3f(x+width, y+height, z)
-  glTexCoord2f(0.0, 1.0)
-  glVertex3f(x, y+height, z)
-  glEnd()
-
-  glDisable(GL_TEXTURE_2D)
-
-  glEnable(GL_TEXTURE_2D)
-  glBindTexture(GL_TEXTURE_2D, textures[kwargs['backTexture']])
-
-  glBegin(GL_QUADS)
-  glNormal3f(0, 0, -1)
-  glTexCoord2f(0.0, 0.0)
-  glVertex3f(x, y, z-depth)
-  glTexCoord2f(1.0, 0.0)
-  glVertex3f(x+width, y, z-depth)
-  glTexCoord2f(1.0, 1.0)
-  glVertex3f(x+width, y+height, z-depth)
-  glTexCoord2f(0.0, 1.0)
-  glVertex3f(x, y+height, z-depth)
-  glEnd()
-
-  glDisable(GL_TEXTURE_2D)
-
-  glEnable(GL_TEXTURE_2D)
-  glBindTexture(GL_TEXTURE_2D, textures[kwargs['leftTexture']])
-
-  glBegin(GL_QUADS)
-  glNormal3f(-1, 0, 0)
-  glTexCoord2f(0.0, 0.0)
-  glVertex3f(x, y, z)
-  glTexCoord2f(1.0, 0.0)
-  glVertex3f(x, y, z-depth)
-  glTexCoord2f(1.0, 1.0)
-  glVertex3f(x, y+height, z-depth)
-  glTexCoord2f(0.0, 1.0)
-  glVertex3f(x, y+height, z)
-  glEnd()
-
-  glDisable(GL_TEXTURE_2D)
-
-  glEnable(GL_TEXTURE_2D)
-  glBindTexture(GL_TEXTURE_2D, textures[kwargs['rightTexture']])
-
-  glBegin(GL_QUADS)
-  glNormal3f(1, 0, 0)
-  glTexCoord2f(0.0, 0.0)
-  glVertex3f(x+width, y, z)
-  glTexCoord2f(1.0, 0.0)
-  glVertex3f(x+width, y, z-depth)
-  glTexCoord2f(1.0, 1.0)
-  glVertex3f(x+width, y+height, z-depth)
-  glTexCoord2f(0.0, 1.0)
-  glVertex3f(x+width, y+height, z)
-  glEnd()
-
-  glDisable(GL_TEXTURE_2D)
-
-  glEnable(GL_TEXTURE_2D)
-  glBindTexture(GL_TEXTURE_2D, textures[kwargs['topTexture']])
-
-  glBegin(GL_QUADS)
-  glNormal3f(0, -1, 0)
-  glTexCoord2f(0.0, 0.0)
-  glVertex3f(x, y+height, z)
-  glTexCoord2f(1.0, 0.0)
-  glVertex3f(x, y+height, z-depth)
-  glTexCoord2f(1.0, 1.0)
-  glVertex3f(x+width, y+height, z-depth)
-  glTexCoord2f(0.0, 1.0)
-  glVertex3f(x+width, y+height, z)
-  glEnd()
-
-  glDisable(GL_TEXTURE_2D)
-
-  glEnable(GL_TEXTURE_2D)
-  glBindTexture(GL_TEXTURE_2D, textures[kwargs['bottomTexture']])
-
-  glBegin(GL_QUADS)
-  glNormal3f(0, -1, 0)
-  glTexCoord2f(0.0, 0.0)
-  glVertex3f(x, y, z)
-  glTexCoord2f(1.0, 0.0)
-  glVertex3f(x, y, z-depth)
-  glTexCoord2f(1.0, 1.0)
-  glVertex3f(x+width, y, z-depth)
-  glTexCoord2f(0.0, 1.0)
-  glVertex3f(x+width, y, z)
-  glEnd()
-
-  glDisable(GL_TEXTURE_2D)
-
 
 def keyboard(key, x, y):
   if key == b'w':
@@ -175,76 +64,76 @@ def mouse(x, y):
 
 
 def draw_room():
-  create_block(0, 0, 0, 15, 10, 1, restTexture='brick', backTexture='wall')
-  create_block(20, 0, 0, 15, 10, 1, restTexture='brick', backTexture='wall')
+  create_block(0, 0, 0, 15, 10, 1, restTexture=textures['brick'], backTexture=textures['wall'])
+  create_block(20, 0, 0, 15, 10, 1, restTexture=textures['brick'], backTexture=textures['wall'])
   if doorOpen:
     glPushMatrix()
     glTranslatef(15, 0, 0)
     glRotatef(75, 0, 1, 0)
-    create_block(0, 0, 0, 5, 10, 1, restTexture='wood', backTexture='door', frontTexture='door')
+    create_block(0, 0, 0, 5, 10, 1, restTexture=textures['wood'], backTexture=textures['door'], frontTexture=textures['door'])
     glPopMatrix()
   else:
-    create_block(15, 0, 0, 5, 10, 1, restTexture='wood', backTexture='door', frontTexture='door')
+    create_block(15, 0, 0, 5, 10, 1, restTexture=textures['wood'], backTexture=textures['door'], frontTexture=textures['door'])
 
-  create_block(-1, 0, 0, 1, 10, 30, restTexture='brick', rightTexture='wall')
-  create_block(35, 0, 0, 1, 10, 30, restTexture='brick', leftTexture='wall')
+  create_block(-1, 0, 0, 1, 10, 30, restTexture=textures['brick'], rightTexture=textures['wall'])
+  create_block(35, 0, 0, 1, 10, 30, restTexture=textures['brick'], leftTexture=textures['wall'])
 
-  create_block(0, 0, -30, 35, 10, 1, restTexture='brick', frontTexture='wall')
+  create_block(0, 0, -30, 35, 10, 1, restTexture=textures['brick'], frontTexture=textures['wall'])
 
-  create_block(0, 0, 0, 35, 0, 30, restTexture='floor')
-  create_block(0, 10, 0, 35, 0, 30, restTexture='wall')
+  create_block(0, 0, 0, 35, 0, 30, restTexture=textures['floor'])
+  create_block(0, 10, 0, 35, 0, 30, restTexture=textures['wall'])
 
 def draw_picture():
-  create_block(0.1, 4, -15, 0, 4, 3, restTexture='picture')
-  create_block(0.1, 3.7, -15, 0.2, 0.3, 3, restTexture='floor')
-  create_block(0.1, 8, -15, 0.2, 0.3, 3, restTexture='floor')
-  create_block(0.1, 3.7, -14.7, 0.2, 4.6, 0.3, restTexture='floor')
-  create_block(0.1, 3.7, -18, 0.2, 4.6, 0.3, restTexture='floor')
+  create_block(0.1, 4, -15, 0, 4, 3, restTexture=textures['picture'])
+  create_block(0.1, 3.7, -15, 0.2, 0.3, 3, restTexture=textures['floor'])
+  create_block(0.1, 8, -15, 0.2, 0.3, 3, restTexture=textures['floor'])
+  create_block(0.1, 3.7, -14.7, 0.2, 4.6, 0.3, restTexture=textures['floor'])
+  create_block(0.1, 3.7, -18, 0.2, 4.6, 0.3, restTexture=textures['floor'])
 
 def draw_table():
-  create_block(13, 3, -10, 9, 0.5, 7, restTexture='wood')
-  create_block(13.5, 0, -10.5, 0.5, 3, 0.5, restTexture='wood')
-  create_block(13.5, 0, -16, 0.5, 3, 0.5, restTexture='wood')
-  create_block(21, 0, -10.5, 0.5, 3, 0.5, restTexture='wood')
-  create_block(21, 0, -16, 0.5, 3, 0.5, restTexture='wood')
+  create_block(13, 3, -10, 9, 0.5, 7, restTexture=textures['wood'])
+  create_block(13.5, 0, -10.5, 0.5, 3, 0.5, restTexture=textures['wood'])
+  create_block(13.5, 0, -16, 0.5, 3, 0.5, restTexture=textures['wood'])
+  create_block(21, 0, -10.5, 0.5, 3, 0.5, restTexture=textures['wood'])
+  create_block(21, 0, -16, 0.5, 3, 0.5, restTexture=textures['wood'])
 
 def draw_chair():
-  create_block(15, 1.5, -18, 2, 0.5, 2, restTexture='wood')
-  create_block(15, 1.5, -20, 2, 3, 0.3, restTexture='wood')
-  create_block(15, 0, -18, 0.3, 1.5, 0.3, restTexture='wood')
-  create_block(16.7, 0, -18, 0.3, 1.5, 0.3, restTexture='wood')
-  create_block(15, 0, -20, 0.3, 1.5, 0.3, restTexture='wood')
-  create_block(16.7, 0, -20, 0.3, 1.5, 0.3, restTexture='wood')
+  create_block(15, 1.5, -18, 2, 0.5, 2, restTexture=textures['wood'])
+  create_block(15, 1.5, -20, 2, 3, 0.3, restTexture=textures['wood'])
+  create_block(15, 0, -18, 0.3, 1.5, 0.3, restTexture=textures['wood'])
+  create_block(16.7, 0, -18, 0.3, 1.5, 0.3, restTexture=textures['wood'])
+  create_block(15, 0, -20, 0.3, 1.5, 0.3, restTexture=textures['wood'])
+  create_block(16.7, 0, -20, 0.3, 1.5, 0.3, restTexture=textures['wood'])
 
 def draw_fridge():
-  create_block(25, 0, -26.5, 5, 8.5, 2, frontTexture='fridge', restTexture='fridge2')
+  create_block(25, 0, -26.5, 5, 8.5, 2, frontTexture=textures['fridge'], restTexture=textures['fridge2'])
 
 def draw_cabinet():
-  create_block(10, 3, -27, 7, 0.5, 3, restTexture='marble')
-  create_block(10.5, 0, -27.5, 6, 3, 2.5, restTexture='wood')
-  create_block(10.7, 0.2, -27.3, 2.7, 2.6, 0.2, restTexture='wood')
-  create_block(13.6, 0.2, -27.3, 2.7, 2.6, 0.2, restTexture='wood')
-  create_block(13.2, 0.2, -27.1, 0.2, 2.6, 0.2, restTexture='metal')
-  create_block(13.6, 0.2, -27.1, 0.2, 2.6, 0.2, restTexture='metal')
+  create_block(10, 3, -27, 7, 0.5, 3, restTexture=textures['marble'])
+  create_block(10.5, 0, -27.5, 6, 3, 2.5, restTexture=textures['wood'])
+  create_block(10.7, 0.2, -27.3, 2.7, 2.6, 0.2, restTexture=textures['wood'])
+  create_block(13.6, 0.2, -27.3, 2.7, 2.6, 0.2, restTexture=textures['wood'])
+  create_block(13.2, 0.2, -27.1, 0.2, 2.6, 0.2, restTexture=textures['metal'])
+  create_block(13.6, 0.2, -27.1, 0.2, 2.6, 0.2, restTexture=textures['metal'])
 
-  create_block(10.5, 5, -27.5, 6, 5, 2.5, restTexture='wood')
-  create_block(10.7, 5.2, -27.3, 2.7, 4.6, 0.2, restTexture='wood')
-  create_block(13.6, 5.2, -27.3, 2.7, 4.6, 0.2, restTexture='wood')
-  create_block(13.6, 5.2, -27.1, 2.7, 0.2, 0.2, restTexture='metal')
-  create_block(10.7, 5.2, -27.1, 2.7, 0.2, 0.2, restTexture='metal')
+  create_block(10.5, 5, -27.5, 6, 5, 2.5, restTexture=textures['wood'])
+  create_block(10.7, 5.2, -27.3, 2.7, 4.6, 0.2, restTexture=textures['wood'])
+  create_block(13.6, 5.2, -27.3, 2.7, 4.6, 0.2, restTexture=textures['wood'])
+  create_block(13.6, 5.2, -27.1, 2.7, 0.2, 0.2, restTexture=textures['metal'])
+  create_block(10.7, 5.2, -27.1, 2.7, 0.2, 0.2, restTexture=textures['metal'])
 
 def draw_fan():
-  create_block(16.75, 8.5, -14.75, 0.5, 1.5, 0.5, restTexture='metal')
+  create_block(16.75, 8.5, -14.75, 0.5, 1.5, 0.5, restTexture=textures['metal'])
   global t
   t += 1
   if t > 359: t = 0
   glPushMatrix()
   glTranslatef(17, 8.5, -15)
   glRotatef(t, 0, -1, 0)
-  create_block(0, 0, 0.5, 5, 0.1, 1, restTexture='metal')
-  create_block(0, 0, 0.5, -5, 0.1, 1, restTexture='metal')
-  create_block(-0.5, 0, 0, 1, 0.1, 5, restTexture='metal')
-  create_block(-0.5, 0, 0, 1, 0.1, -5, restTexture='metal')
+  create_block(0, 0, 0.5, 5, 0.1, 1, restTexture=textures['metal'])
+  create_block(0, 0, 0.5, -5, 0.1, 1, restTexture=textures['metal'])
+  create_block(-0.5, 0, 0, 1, 0.1, 5, restTexture=textures['metal'])
+  create_block(-0.5, 0, 0, 1, 0.1, -5, restTexture=textures['metal'])
   glPopMatrix()
 
 
