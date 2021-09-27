@@ -5,6 +5,7 @@ import glm
 from utils.camera import Camera
 from utils.texture_loader import load_texture
 from utils.block_creator import create_block
+from math import *
 
 textures = {}
 
@@ -16,6 +17,8 @@ angleX = -90
 angleY = 0
 
 t = 0
+minute_angle = 0
+hour_angle = 0
 doorOpen = False
 
 cam = Camera(WIDTH, HEIGHT)
@@ -122,6 +125,47 @@ def draw_teapot():
 
   glDisable(GL_TEXTURE_2D)
 
+def draw_clock(x, y, z):
+  r = 1
+  glEnable(GL_TEXTURE_2D)
+  glBindTexture(GL_TEXTURE_2D, textures['clock'])
+
+  glBegin(GL_POLYGON)
+  for i in range(360):
+    rad = i * (pi/180)
+    cx = r * cos(rad) + x
+    cy = r * sin(rad) + y
+
+    tx = cos(rad) * 0.5 + 0.5
+    ty = sin(rad) * 0.5 + 0.5
+    glTexCoord2f(tx, ty)
+
+    glVertex3f(cx, cy, z)
+    
+  glEnd()
+
+  glDisable(GL_TEXTURE_2D)
+
+  glPushMatrix()
+  glTranslatef(x, y, z+0.1)
+  glRotatef(t, 0, 0, -1)
+  create_block(-0.05, -0.05, 0, 0.1, 0.8, 0, restTexture=textures['metal'])
+  glPopMatrix()
+
+  glPushMatrix()
+  glTranslatef(x, y, z+0.1)
+  glRotatef(minute_angle, 0, 0, -1)
+  create_block(-0.05, -0.05, 0, 0.1, 0.7, 0, restTexture=textures['metal'])
+  glPopMatrix()
+
+  glPushMatrix()
+  glTranslatef(x, y, z+0.1)
+  glRotatef(hour_angle, 0, 0, -1)
+  create_block(-0.05, -0.05, 0, 0.1, 0.6, 0, restTexture=textures['metal'])
+  glPopMatrix()
+
+  create_block(x-0.05, y-0.05, z+0.1, 0.1, 0.1, 0, restTexture=textures['metal'])
+
 def draw_cabinet():
   create_block(10, 3, -27, 7, 0.5, 3, restTexture=textures['marble'])
   create_block(10.5, 0, -27.5, 6, 3, 2.5, restTexture=textures['wood'])
@@ -138,9 +182,7 @@ def draw_cabinet():
 
 def draw_fan():
   create_block(16.75, 8.5, -14.75, 0.5, 1.5, 0.5, restTexture=textures['metal'])
-  global t
-  t += 1
-  if t > 359: t = 0
+  
   glPushMatrix()
   glTranslatef(17, 8.5, -15)
   glRotatef(t, 0, -1, 0)
@@ -162,6 +204,17 @@ def showScreen():
   #glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, [0, 1, 0])
   #glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 90)
 
+  global t, minute_angle, hour_angle
+  t += 1
+  if t > 359:
+    t = 0
+    minute_angle += 6
+    hour_angle += 0.5
+  if minute_angle > 359:
+    minute_angle = 0
+  if hour_angle > 359:
+    hour_angle = 0 
+
   draw_room()
   draw_table()
   draw_chair()
@@ -169,6 +222,7 @@ def showScreen():
   draw_fridge()
   draw_stove()
   draw_teapot()
+  draw_clock(3, 7, -29.9)
   draw_cabinet()
   draw_fan()
 
@@ -193,6 +247,7 @@ textures['marble'] = load_texture('textures/marble.jpg')
 textures['fridge'] = load_texture('textures/fridge.png')
 textures['fridge2'] = load_texture('textures/fridge2.png')
 textures['stove'] = load_texture('textures/stove.png')
+textures['clock'] = load_texture('textures/clock.jpg')
 
 glutDisplayFunc(showScreen)
 glutIdleFunc(showScreen)
