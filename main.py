@@ -20,6 +20,9 @@ t = 0
 minute_angle = 0
 hour_angle = 0
 doorOpen = False
+door_angle = 0
+windowOpen = False
+window_angle = 0
 
 cam = Camera(WIDTH, HEIGHT)
 
@@ -38,6 +41,12 @@ def keyboard(key, x, y):
       doorOpen = False
     else:
       doorOpen = True
+  elif key == b'j':
+    global windowOpen
+    if windowOpen:
+      windowOpen = False
+    else:
+      windowOpen = True
 
 
 def mouse(x, y):
@@ -69,17 +78,32 @@ def mouse(x, y):
 def draw_room():
   create_block(0, 0, 0, 15, 10, 1, restTexture=textures['brick'], backTexture=textures['wall'])
   create_block(20, 0, 0, 15, 10, 1, restTexture=textures['brick'], backTexture=textures['wall'])
-  if doorOpen:
-    glPushMatrix()
-    glTranslatef(15, 0, 0)
-    glRotatef(75, 0, 1, 0)
-    create_block(0, 0, 0, 5, 10, 1, restTexture=textures['wood'], backTexture=textures['door'], frontTexture=textures['door'])
-    glPopMatrix()
-  else:
-    create_block(15, 0, 0, 5, 10, 1, restTexture=textures['wood'], backTexture=textures['door'], frontTexture=textures['door'])
+  
+  glPushMatrix()
+  glTranslatef(15, 0, 0)
+  glRotatef(door_angle, 0, 1, 0)
+  create_block(0, 0, 0, 5, 10, 1, restTexture=textures['wood'], backTexture=textures['door'], frontTexture=textures['door'])
+  glPopMatrix()
 
   create_block(-1, 0, 0, 1, 10, 30, restTexture=textures['brick'], rightTexture=textures['wall'])
-  create_block(35, 0, 0, 1, 10, 30, restTexture=textures['brick'], leftTexture=textures['wall'])
+
+  create_block(35, 0, 0, 1, 10, 12.5, restTexture=textures['brick'], leftTexture=textures['wall'])
+  create_block(35, 0, -17.5, 1, 10, 12.5, restTexture=textures['brick'], leftTexture=textures['wall'])
+
+  create_block(35, 0, -12.5, 1, 2.5, 5, restTexture=textures['brick'], leftTexture=textures['wall'])
+  create_block(35, 7.5, -12.5, 1, 2.5, 5, restTexture=textures['brick'], leftTexture=textures['wall'])
+
+  glPushMatrix()
+  glTranslatef(35, 2.5, -12.5)
+  glRotatef(window_angle, 0, -1, 0)
+  create_block(0, 0, 0, 1, 5, 2.5, restTexture=textures['wood'], leftTexture=textures['window1'], rightTexture=textures['window1'])
+  glPopMatrix()
+
+  glPushMatrix()
+  glTranslatef(35, 2.5, -17.5)
+  glRotatef(window_angle, 0, 1, 0)
+  create_block(0, 0, 0, 1, 5, -2.5, restTexture=textures['wood'], leftTexture=textures['window2'], rightTexture=textures['window2'])
+  glPopMatrix()
 
   create_block(0, 0, -30, 35, 10, 1, restTexture=textures['brick'], frontTexture=textures['wall'])
 
@@ -204,7 +228,7 @@ def showScreen():
   #glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, [0, 1, 0])
   #glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 90)
 
-  global t, minute_angle, hour_angle
+  global t, minute_angle, hour_angle, door_angle, window_angle
   t += 1
   if t > 359:
     t = 0
@@ -213,7 +237,16 @@ def showScreen():
   if minute_angle > 359:
     minute_angle = 0
   if hour_angle > 359:
-    hour_angle = 0 
+    hour_angle = 0
+
+  if doorOpen and door_angle < 75:
+    door_angle += 1
+  if not doorOpen and door_angle > 0:
+    door_angle -= 1
+  if windowOpen and window_angle < 75:
+    window_angle += 1
+  if not windowOpen and window_angle > 0:
+    window_angle -= 1
 
   draw_room()
   draw_table()
@@ -248,6 +281,8 @@ textures['fridge'] = load_texture('textures/fridge.png')
 textures['fridge2'] = load_texture('textures/fridge2.png')
 textures['stove'] = load_texture('textures/stove.png')
 textures['clock'] = load_texture('textures/clock.jpg')
+textures['window1'] = load_texture('textures/window1.jpg')
+textures['window2'] = load_texture('textures/window2.png')
 
 glutDisplayFunc(showScreen)
 glutIdleFunc(showScreen)
