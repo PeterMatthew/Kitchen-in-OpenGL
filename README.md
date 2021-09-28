@@ -34,4 +34,6 @@ https://youtu.be/pVprG3pbPb4
 https://opengameart.org/content/kitchen-texture-pack<br/>
 https://learnopengl.com/<br/>
 https://wiki.python.org/moin/PyOpenGL<br/>
-https://www.glprogramming.com/red/chapter05.html
+https://www.glprogramming.com/red/chapter05.html<br/>
+https://stackoverflow.com/questions/8762826/texture-mapping-a-circle-made-using-gl-polygon<br/>
+https://www.flickr.com/photos/25797459@N06/albums/72157658218936295
