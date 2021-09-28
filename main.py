@@ -17,6 +17,8 @@ angleX = -90
 angleY = 0
 
 t = 0
+t_day = 0
+rotation = True
 minute_angle = 0
 hour_angle = 0
 doorOpen = False
@@ -47,13 +49,20 @@ def keyboard(key, x, y):
       windowOpen = False
     else:
       windowOpen = True
+  elif key == b'm':
+    global rotation
+    if rotation:
+      rotation = False
+    else:
+      rotation = True
+
 
 
 def mouse(x, y):
   global pastX, pastY, angleX, angleY
 
-  changeX = (x - pastX) * 0.4
-  changeY = (y - pastY) * 0.4
+  changeX = (x - pastX) * 0.6
+  changeY = (y - pastY) * 0.6
 
   angleX += changeX
   angleY += changeY
@@ -275,8 +284,11 @@ def showScreen():
   #glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, [0, 1, 0])
   #glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 90)
 
-  global t, minute_angle, hour_angle, door_angle, window_angle
+  global t, t_day, minute_angle, hour_angle, door_angle, window_angle
   t += 1
+  if rotation: t_day += 0.1
+  if t_day > 359:
+    t_day = 0
   if t > 359:
     t = 0
     minute_angle += 6
@@ -317,6 +329,19 @@ def showScreen():
   draw_chair()
   draw_teapot()
   glPopMatrix()
+
+  glColor3f(1, 1, 0)
+
+  glPushMatrix()
+  glRotatef(t_day, -1, 0, 0)
+  glTranslatef(0, 0, 500)
+  glutSolidSphere(40, 10, 10)
+  glTranslatef(0, 0, -1000)
+  glColor3f(0.4, 0.4, 0.4)
+  glutSolidSphere(25, 10, 10)
+  glPopMatrix()
+
+  glColor3f(1, 1, 1)
 
   glutSwapBuffers()
 

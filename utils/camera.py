@@ -14,7 +14,7 @@ class Camera:
   def init(self):
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    gluPerspective(75, self.width/self.height, 0.1, 500)
+    gluPerspective(75, self.width/self.height, 0.1, 600)
 
   def update(self):
     new = self.pos + self.front
