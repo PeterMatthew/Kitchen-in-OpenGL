@@ -110,6 +110,53 @@ def draw_room():
   create_block(0, 0, 0, 35, 0, 30, restTexture=textures['floor'])
   create_block(0, 10, 0, 35, 0, 30, restTexture=textures['wall'])
 
+def draw_garden():
+  create_block(0, 0, 35, 35, 0, 35, restTexture=textures['gram'])
+
+def draw_fence():
+  for i in range(7):
+    create_block(-1, 0, 35-(i*5), 1, 5, 5, restTexture=textures['fence'])
+
+  for i in range(7):
+    create_block(35, 0, 35-(i*5), 1, 5, 5, restTexture=textures['fence'])
+
+  for i in range(7):
+    create_block(30-(i*5), 0, 35, 5, 5, 1, restTexture=textures['fence'])
+
+def draw_cube():
+  create_block(7, 0, 15, 3, 3, 3, restTexture=textures['cube'])
+
+def draw_tree():
+  create_block(9.5, 0, 25.5, 1, 3, 1, restTexture=textures['tree'])
+  
+  glPushMatrix()
+  glColor3f(0.196, 0.549, 0.2)
+  glTranslatef(10, 3, 25)
+  glRotatef(90, -1, 0, 0)
+  glutSolidCone(3, 2.5, 10, 10)
+
+  glTranslatef(0, 0, 1.5)
+  glutSolidCone(2.8, 2.6, 10, 10)
+
+  glTranslatef(0, 0, 1.5)
+  glutSolidCone(2.6, 2.7, 10, 10)
+
+  glTranslatef(0, 0, 1.5)
+  glutSolidCone(2.4, 2.8, 10, 10)
+
+  glTranslatef(0, 0, 1.5)
+  glutSolidCone(2.2, 2.9, 10, 10)
+
+  glTranslatef(0, 0, 1.5)
+  glutSolidCone(2.0, 3.0, 10, 10)
+
+  glColor3f(1, 1, 1)
+  glPopMatrix()
+
+def draw_board():
+  create_block(25, 0, 25, 0.5, 5, 0.5, restTexture=textures['fence'])
+  create_block(23.75, 5, 25, 3, 2, 0.5, frontTexture=textures['board'], backTexture=textures['board'], restTexture=textures['metal'])
+
 def draw_picture():
   create_block(0.1, 4, -15, 0, 4, 3, restTexture=textures['picture'])
   create_block(0.1, 3.7, -15, 0.2, 0.3, 3, restTexture=textures['floor'])
@@ -249,6 +296,11 @@ def showScreen():
     window_angle -= 1
 
   draw_room()
+  draw_garden()
+  draw_fence()
+  draw_cube()
+  draw_tree()
+  draw_board()
   draw_table()
   draw_chair()
   draw_picture()
@@ -258,6 +310,13 @@ def showScreen():
   draw_clock(3, 7, -29.9)
   draw_cabinet()
   draw_fan()
+
+  glPushMatrix()
+  glTranslatef(10, 0, 25)
+  draw_table()
+  draw_chair()
+  draw_teapot()
+  glPopMatrix()
 
   glutSwapBuffers()
 
@@ -283,6 +342,11 @@ textures['stove'] = load_texture('textures/stove.png')
 textures['clock'] = load_texture('textures/clock.jpg')
 textures['window1'] = load_texture('textures/window1.jpg')
 textures['window2'] = load_texture('textures/window2.png')
+textures['gram'] = load_texture('textures/gram.jpg')
+textures['fence'] = load_texture('textures/fence.jpg')
+textures['cube'] = load_texture('textures/cube.jpg')
+textures['tree'] = load_texture('textures/tree.jpg')
+textures['board'] = load_texture('textures/board.jpg')
 
 glutDisplayFunc(showScreen)
 glutIdleFunc(showScreen)
